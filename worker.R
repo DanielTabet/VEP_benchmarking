@@ -12,13 +12,15 @@ if (length(args) != 3) {
 source("lib/loadConfig.R")
 config = loadConfig(args[1])
 
-# Add gene name to the config
+# Add gene name and ensembl IDs to the config
 config$gene = tolower(args[2])
+config$ensembl_id = toupper(args[3])
+config$canonical_transcript_id = toupper(args[4])
 
 # Start logging
-if (is.na(args[3])) stop("Log file path not specified")
+if (is.na(args[5])) stop("Log file path not specified")
 library(logr)
-logFile = log_open(args[3])
+logFile = log_open(args[5], logdir = F)
 
 # Helper function: detach all packages
 detachAllPackages = function() {

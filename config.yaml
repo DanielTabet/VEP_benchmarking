@@ -1,23 +1,30 @@
 ###
 # Run-specific settings
-# Descriptions are avilable in the README.md file.
+# Adjust this section for each run.
 ###
 gene_list: common/genes.csv
 phenotype_list: common/phenotypeDescriptions.csv
-rscript_path: Rscript.exe
-occurance_cutoff: 10
+rscript_path: Rscript
+input_var_dir: input
+occurance_cutoff: 10 # Variant occurance cut-off for categorical phenotypes
 bootstrap_iterations: 1000
-all_variants_path: merged_hgvs.csv
-unique_variants_path: allv_withweights.csv
+
+###
+# Global settings
+# Adjust this section only when using non-default inputs.
+###
+all_variants_path: ukb23148_c%s_b%s_v1_filtered_mut.csv
+unique_variants_path: ukb23148_c%s_b%s_v1_all_weights.csv
 withdraw_eids_path: common/withdraws.csv
+variant_blocks_path: common/pvcf_blocks.txt
 db_connect_path: db_connect.yaml
 variant_predictors:
-  VARITY: VARITY_R # Format: [predictor name]: [predictor column name in unique variants file]
-  PolyPhen-2: Polyphen2_selected_HVAR_score
-  PROVEAN: provean_flipped
-  SIFT: sift_flipped
+  VARITY: VARITY_R_LOO # Format: [predictor name]: [predictor column name in unique variants file]
+  PolyPhen-2: Polyphen2_HVAR_score
+  PROVEAN: PROVEAN_flipped
+  SIFT: SIFT_flipped
   FATHMM: FATHMM_flipped
-  MPC: mpc_score
+  MPC: MPC_score
   LRT: LRT_flipped
   REVEL: REVEL_score
   PrimateAI: PrimateAI_score
@@ -28,7 +35,9 @@ variant_predictors:
   M-CAP: M-CAP_score
   MetaLR: MetaLR_score
   MetaSVM: MetaSVM_score
-  MutationAssessor: MutationAssessor_selected_score
-  MutationTaster: MutationTaster_selected_score
+  MVP: MVP_score
+  MutationTaster: MutationTaster_score
   SiPhy: SiPhy_29way_logOdds
-  MISTIC: mistic_score
+  MutPred: MutPred_score
+  EVE: EVE_score
+plot_individual_correlations: false

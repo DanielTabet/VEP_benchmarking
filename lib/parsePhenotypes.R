@@ -6,6 +6,7 @@ library(tools)
 library(reshape2)
 library(odbc)
 library(RMariaDB)
+library(retry)
 
 # Set arguments if not passed in already as config
 GENE = tolower(config$gene)

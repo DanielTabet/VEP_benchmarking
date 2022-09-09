@@ -60,7 +60,7 @@ pVals = lapply(1:length(genes), function(index) {
     # Remove NA columns
     corrs = corrs[complete.cases(corrs)]
     if (nrow(corrs) < 1) return(NULL)
-  
+    
     # Compute P values for each phenotype
     phenotypes = unique(corrs$field_id)
     pccPvals = lapply(phenotypes, function(phenotype) {
@@ -107,7 +107,7 @@ pVals = lapply(1:length(genes), function(index) {
   # Check if AUPRC scores exist
   catePhenotypes = bPhenotypes[field_type == "categorical", field_id]
   filePath = sprintf("output/%s/%s_%s_auprc.rds", toupper(gene), gene, catePhenotypes)
-
+  
   if (length(filePath) > 0 & all(file.exists(filePath))) {
     # Load AUPRCs
     results = lapply(filePath, readRDS)
@@ -232,11 +232,25 @@ pVals = lapply(1:length(genes), function(index) {
 pVals = rbindlist(pVals)
 pVals = unique(pVals)
 
-# Extract score
-pVals$pred1_score = abs(extractAUPRC(pVals$pred1))
-
 # Save p-value
 fwrite(pVals, "pvals.csv")
+
+# Helper function: extract AUPRC to predictor label
+extractNumber = function(labels) {
+  return(as.numeric(str_extract_all(labels, "\\d+\\.\\d+|-\\d+\\.\\d+")))
+}
+
+# Extract score
+pVals$pred1_score = extractNumber(pVals$pred1)
+pVals[type == "PCC", pred1_score := pred1_score^2]
+pVals$pred2_score = extractNumber(pVals$pred2)
+pVals[type == "PCC", pred2_score := pred2_score^2]
+pVals$pred1_name = str_split(pVals$pred1, " ", simplify = T)[, 1]
+pVals$pred2_name = str_split(pVals$pred2, " ", simplify = T)[, 1]
+
+# Restrict to gene-trait combinations where every predictor was able to make prediction
+subsetGeneCombs = pVals[, .N, by = c("gene", "code")][N == 441] # 21 * 21 = 441 pairwise predictor comparisons
+pVals = merge(pVals, subsetGeneCombs[, .(gene, code)])
 
 # Count the number of variant predictors that are indistinguishable from 
 # the best performing predictor
@@ -256,6 +270,49 @@ predictors = rbindlist(predictors)
 
 # Summarize predictors
 predictors = predictors[, .(num_indistinguishable = .N), by = "indistingushable_pred"]
+
+# Compute Wilcoxon U test p values
+sigTest = pVals[, .N, by = c("pred1_name", "pred2_name")]
+sigs = apply(sigTest, 1, function(row) {
+  pred1Name = row[["pred1_name"]]
+  pred2Name = row[["pred2_name"]]
+  
+  # Do not compare two same predictors
+  if (pred1Name == pred2Name) return(NA)
+  
+  # Do not compare if predictor 2 did not perform as well as predictor 1
+  pred1Perf = predictors[indistingushable_pred == pred1Name, num_indistinguishable]
+  pred2Perf = predictors[indistingushable_pred == pred2Name, num_indistinguishable]
+  if (pred2Perf <= pred1Perf) return(1)
+  
+  # Filtered table
+  subPVals = pVals[pred1_name == pred1Name & pred2_name == pred2Name]
+  
+  sig = wilcox.test(subPVals$pred1_score, subPVals$pred2_score, alternative = "less", paired = T, exact = F)
+  return(sig$p.value)
+})
+sigTest$p_val = sigs
+sigTest$q_val = qvalue(sigs)$qvalues
+
+# Plot comparison
+plotTable = merge(sigTest, predictors, by.x = "pred1_name", by.y = "indistingushable_pred")
+plotTable = merge(plotTable, predictors, by.x = "pred2_name", by.y = "indistingushable_pred")
+plot = plotTable %>%
+  dplyr::mutate(pred1 = sprintf("%s (%d)", pred1_name, num_indistinguishable.x),
+                pred2 = sprintf("%s (%d)", pred2_name, num_indistinguishable.y),
+                q_val = ifelse(q_val > 0.1, 0.1, q_val)) %>%
+  dplyr::mutate(pred1 = forcats::fct_reorder(pred1, num_indistinguishable.x),
+                pred2 = forcats::fct_reorder(pred2, num_indistinguishable.y)) %>%
+  ggplot() +
+  geom_tile(aes(x = pred1, y = pred2, fill = q_val), size = 0.5, color = "#d8d8d8") +
+  scale_fill_gradientn(name = "FDR", limits = c(0, 0.1), labels = c("0", "\u2265 0.1"),
+                       breaks = c(0, 0.1), na.value = "lightgrey",
+                       colors = c("#034c9d", "white")) +
+  theme_minimal(base_size = 16) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
+        legend.position = "bottom", plot.title = element_markdown(),
+        legend.title = element_text(vjust = 0.75))
+ggsave("method_comparsion.png", plot, height = 7, width = 7, units = "in")
 
 # Plot absolute indistingusiable
 plotTable = predictors[, .(method = indistingushable_pred, num_indistinguishable)]

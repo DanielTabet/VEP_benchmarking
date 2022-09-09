@@ -17,6 +17,8 @@ Next, clone the repository by typing the following into your command line interf
 git clone https://github.com/kvnkuang/variant-effect-predictor-assessment
 ```
 
+You also need to download VARITY predictions (http://varity.varianteffect.org/downloads/varity_all_predictions.tar.gz), unzip the file (varity_all_predictions.txt) and move it to the `common` folder.
+
 ## Confiugre the running parameters
 
 The [config.yaml](config.yaml) file lists all the running parameters that you can congifure.
@@ -27,14 +29,17 @@ Here we document all parameters supported by the pipeline and their functions.
 | --- | --- | --- |
 | gene_list| A file with all the genes used in the study.<br>*See the sample file referred to by the default value for format.* | [common/genes.csv](common/genes.csv) |
 | phenotype_list | A file with all phenotypes (traits) used in the study. <br>*See the sample file referred to by the default value for format.* | [common/phenotypeDescriptions.csv](common/phenotypeDescriptions.csv) |
-| rscript_path | The path to the RScript executable. | Rscript.exe |
+| rscript_path | The path to the RScript executable. | Rscript |
+| input_var_dir | The path to the input variants. | input |
 | occurance_cutoff | The occurance cutoff used in the study.<br>*See the Material & Method section of the manuscript for detail.* | 10 |
 | bootstrap_iterations | The number of iterations for the bootstrap resampling process.<br>*See the Material & Method section of the manuscript for detail.* | 1000 |
-| all_variants_path | The filename of the input file with all variants in a given gene. | merged_hgvs.csv |
-| unique_variants_path | The filename of the input file with unique variants and computational predictor scores for a given gene. | allv_withweights.csv |
+| all_variants_path | The filename pattern of the input variant files. | ukb23148_c%s_b%s_v1_filtered_mut.csv |
+| unique_variants_path | The filename pattern of the input unique variants and computational predictor scores. | ukb23148_c%s_b%s_v1_all_weights.csv |
+| variant_blocks_path | The filename of the pVCF file blocks. For ease of handling the pVCF formatted information for the exome genetics was split across a number of files. This document itemises the content of these files. Read more about this here: https://biobank.ctsu.ox.ac.uk/crystal/refer.cgi?id=837 | common/pvcf_blocks.txt |
 | withdraw_eids_path | A file with all the participants who have withdrawn their participation in the UK Biobank.<br>*See the sample file referred to by the default value for format. Replace "<withdrawn_eidx>" in the sample file with actual EIDs. We are unable to provide real EIDs due to UK Biobank's data sharing restrictions.* | [common/withdraws.csv](common/withdraws.csv) |
 | db_connect_path | A file with connection credentials to a local database where all UK Biobank variants are stored.<br>*See the sample file referred to by the default value for format. We are unable to provide access to the real database, but please see below ("Set up UK Biobank database") for the database schema that you can use to set up the database yourself with UK Biobank data.* | [db_connect.yaml](db_connect.yaml) |
-| variant_predictors | A list of variant effect predictors used in the study.<br>*Format: [predictor name]: [predictor column name in unique variants file (unique_variants_path)]* | *!incomplete list!*<br>VARITY: VARITY_R<br>PolyPhen-2: Polyphen2_selected_HVAR_score<br>... |
+| variant_predictors | A list of variant effect predictors used in the study.<br>*Format: [predictor name]: [predictor column name in unique variants file (unique_variants_path)]* | *!incomplete list!*<br>VARITY: VARITY_R_LOO<br>PolyPhen-2: Polyphen2_selected_HVAR_score<br>... |
+| plot_individual_correlations | Whetherindividually plot correlations as scatterplots | FALSE |
 
 ## Set up a local UK Biobank phenotype database
 
@@ -83,6 +88,12 @@ Rscript main.R <configuration-file> <log-dir>
 There are two required arguments:
 1. **configuration-file:** the path to configuration file (e.g. config.yaml)
 2. **log-dir:** the directory to the log files (e.g. logs/)
+
+## Output
+
+All output should be stored in the `output` folder.
+
+In addition, a `pval.csv` is created in the root folder containing all pairwise predictor comparisons. The `pval.csv` included in this repository was generated from the benchmark described in the manuscript.
 
 ## Contact us
 

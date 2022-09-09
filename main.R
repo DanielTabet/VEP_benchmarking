@@ -32,13 +32,16 @@ if (!all(hasInput)) {
 }
 
 # Start workers
-hasInput = geneList$gene_symbol[hasInput]
-invisible(lapply(hasInput, function (gene) {
+invisible(apply(geneList, 1, function (row) {
+  gene = row[["gene_symbol"]]
+  ensemblId = row[["gene_id"]]
+  transcriptId = row[["canonical_transcript"]]
   index = which(geneList$gene_symbol == gene)
-  log_print(paste("==> Process gene", gene, 
+  log_print(paste("==> Process gene", gene,
                   sprintf("(index = %d)", index)))
   logPath = sprintf("%s.log", gene)
-  system2(config$rscript_path, args = c("worker.R", args[1], gene, 
+  system2(config$rscript_path, args = c("worker.R", args[1], gene, ensemblId,
+                                        transcriptId,
                                         paste(args[2], logPath, sep = "/")))
   log_print("")
 }))
