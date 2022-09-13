@@ -40,7 +40,8 @@ Here we document all parameters supported by the pipeline and their functions.
 | variant_blocks_path | The filename of the pVCF file blocks. For ease of handling the pVCF formatted information for the exome genetics was split across a number of files. This document itemises the content of these files. Read more about this here: https://biobank.ctsu.ox.ac.uk/crystal/refer.cgi?id=837 | common/pvcf_blocks.txt |
 | withdraw_eids_path | A file with all the participants who have withdrawn their participation in the UK Biobank.<br>*See the sample file referred to by the default value for format. Replace "<withdrawn_eidx>" in the sample file with actual EIDs. We are unable to provide real EIDs due to UK Biobank's data sharing restrictions.* | [common/withdraws.csv](common/withdraws.csv) |
 | db_connect_path | A file with connection credentials to a local database where all UK Biobank variants are stored.<br>*See the sample file referred to by the default value for format. We are unable to provide access to the real database, but please see below ("Set up UK Biobank database") for the database schema that you can use to set up the database yourself with UK Biobank data.* | [db_connect.yaml](db_connect.yaml) |
-| variant_predictors | A list of variant effect predictors used in the study.<br>*Format: [predictor name]: [predictor column name in unique variants file (unique_variants_path)]* | *!incomplete list!*<br>VARITY: VARITY_R_LOO<br>PolyPhen-2: Polyphen2_selected_HVAR_score<br>... |
+| variant_predictors | A list of variant effect predictors used in the study.<br>*Format: [predictor name]: [predictor column name in unique variants file (unique_variants_path)]* | *!incomplete list!*<br>VARITY: VARITY_R_LOO_LOO<br>PolyPhen-2: Polyphen2_selected_HVAR_score<br>... |
+| plot_individual_correlations | Whetherindividually plot correlations as scatterplots | FALSE |
 | plot_individual_correlations | Whetherindividually plot correlations as scatterplots | FALSE |
 
 ## Set up a local UK Biobank phenotype database
@@ -90,6 +91,12 @@ Rscript main.R <configuration-file> <log-dir>
 There are two required arguments:
 1. **configuration-file:** the path to configuration file (e.g. config.yaml)
 2. **log-dir:** the directory to the log files (e.g. logs/)
+
+## Output
+
+All output should be stored in the `output` folder.
+
+In addition, a `pval.csv` is created in the root folder containing all pairwise predictor comparisons. The `pval.csv` included in this repository was generated from the benchmark described in the manuscript.
 
 ## Output
 

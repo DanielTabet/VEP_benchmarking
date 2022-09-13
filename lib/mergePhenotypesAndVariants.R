@@ -8,6 +8,8 @@ phenotypes = fread(sprintf("output/%s/%s_phenotypes_filtered.csv", toupper(GENE)
 variants = fread(sprintf("output/%s/%s_variants_filtered.csv", toupper(GENE), GENE))
 
 # Merge variants and phenotypes
+variants$eid = as.numeric(variants$eid)
+variants = variants[!is.na(eid)]
 variants = merge(variants, phenotypes, by = "eid")
 
 # Select quantitative phenotypes
