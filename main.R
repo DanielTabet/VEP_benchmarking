@@ -18,7 +18,7 @@ library(logr)
 logFile = log_open(paste(args[2], "main.log", sep = "/"))
 
 # If no output folder, create one
-if (!dir.exists("output")) dir.create("output")
+if (!dir.exists(OUTPUT_PATH)) dir.create(OUTPUT_PATH)
 
 # Process gene list
 library(data.table)
@@ -35,14 +35,13 @@ if (!all(hasInput)) {
 invisible(apply(geneList, 1, function (row) {
   gene = row[["gene_symbol"]]
   ensemblId = row[["gene_id"]]
-  transcriptId = row[["canonical_transcript"]]
+  #transcriptId = row[["canonical_transcript"]]
   index = which(geneList$gene_symbol == gene)
   log_print(paste("==> Process gene", gene,
                   sprintf("(index = %d)", index)))
   logPath = sprintf("%s.log", gene)
-  system2(config$rscript_path, args = c("worker.R", args[1], gene, ensemblId,
-                                        transcriptId,
-                                        paste(args[2], logPath, sep = "/")))
+  system2(config$rscript_path, args = c("worker.R", args[1], gene, 
+                                        paste(args[2], logPath, sep = "/"), ensemblId))
   log_print("")
 }))
 
@@ -51,8 +50,8 @@ log_print("Collecting benchmark results")
 source("lib/collectBenchmarkResults.R")
 
 # Compute misc stats
-log_print("Computing misc. stats")
-source("lib/miscStats.R")
+#log_print("Computing misc. stats")
+#source("lib/miscStats.R")
 
 log_print("Complete!")
 log_close()

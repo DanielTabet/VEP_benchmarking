@@ -8,6 +8,7 @@ rscript_path: Rscript
 input_var_dir: input
 occurance_cutoff: 10 # Variant occurance cut-off for categorical phenotypes
 bootstrap_iterations: 1000
+output_path : output
 
 ###
 # Global settings
@@ -15,7 +16,7 @@ bootstrap_iterations: 1000
 ###
 all_variants_path: ukb23148_c%s_b%s_v1_filtered_mut.csv
 unique_variants_path: ukb23148_c%s_b%s_v1_all_weights.csv
-withdraw_eids_path: common/withdraws.csv
+withdraw_eids_path: common/withdrawnParticipants_042023.csv
 variant_blocks_path: common/pvcf_blocks.txt
 db_connect_path: db_connect.yaml
 variant_predictors:

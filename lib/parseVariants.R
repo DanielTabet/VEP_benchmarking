@@ -1,24 +1,23 @@
 library(data.table)
 library(stringr)
-library(EnsDb.Hsapiens.v86)
-Sys.setenv(PATH=paste(Sys.getenv("PATH"), "/opt/homebrew/bin/", sep=":"))
 
-# Set arguments if not passed in already as config
+# Set arguments
 GENE = tolower(config$gene)
 ENSEMBL_ID = toupper(config$ensembl_id)
-CAN_TRANSCRIPT_ID = toupper(config$canonical_transcript_id)
+#CAN_TRANSCRIPT_ID = toupper(config$canonical_transcript_id)
 INPUT_VARIANTs_DIR = config$input_var_dir
 ALL_VARIANTs_PATH = config$all_variants_path
 UNIQUE_VARIANTs_PATH = config$unique_variants_path
 WITHDRAW_EIDs_PATH = config$withdraw_eids_path
 VARIANT_BLOCKs_PATH = config$variant_blocks_path
+OUTPUT_PATH = config$output_path
 
-# Identify variants belong to the gene of interest
-# 1) Get gene's genome coordinate
-edb = EnsDb.Hsapiens.v86
-gene = genes(edb, filter = GeneIdFilter(ENSEMBL_ID))
-coordinate = data.table("chr" = as.character(seqnames(gene)),
-                        "start" = start(gene), "end" = end(gene))
+# SELECT VARIANTS FOR GENE OF INTEREST
+# 1) Get genomic coordinates
+ensemblDB = fread("common/ensemblDB.txt")
+coordinate = data.table(ensemblDB)
+coordinate = coordinate[ensemblID==ENSEMBL_ID]
+
 # 2) Select variant files within range
 varBlocks = fread(VARIANT_BLOCKs_PATH, drop = 1, col.names = c("chr", "block", "start", "end"))
 blocks = varBlocks[chr == coordinate$chr]
@@ -30,8 +29,9 @@ if (!nrow(blocks)) {
   blocks = rbind(blocks[start <= coordinate$start][which.max(start)],
                  blocks[end >= coordinate$end][which.min(start)])
 }
-# If still no blocks, stop
+  # If still no blocks, stop
 if (!nrow(blocks)) stop("no blocks found. Please check the genome coordinate")
+
 # 3) Load variants within the selected blocks
 mergedVariants = apply(blocks, 1, function(row) {
   chrom = row[["chr"]]
@@ -51,70 +51,59 @@ mergedVariants = apply(blocks, 1, function(row) {
 })
 mergedVariants = rbindlist(mergedVariants, use.names = T, fill = T)
 
-# Select unique variants:
-# 1) gnomAD MAF < 0.1% (0.001)
-# 2) Missense
-mergedVariants = mergedVariants[is.na(gnomAD_AF), gnomAD_AF := 0]
-mergedVariants = mergedVariants[gnomAD_AF < 0.001 &
-                                  str_detect(Consequence, "missense_variant")]
+# SELECT VARIANTS
+# 1) Allele frequency -- gnomAD MAF < 0.1% (0.001) | UKB < 0.1% (0.001)
+mergedVariants[is.na(gnomAD_AF), gnomAD_AF := 0]
+mergedVariants = mergedVariants[gnomAD_AF < 0.001 & AF < 0.001]
 
-# Split scores
-mergedVariants[, Ensembl_transcriptid := str_split(Ensembl_transcriptid, fixed(","))]
-mergedVariants[, Uniprot_acc := str_split(Uniprot_acc, fixed(","))]
-mergedVariants[, PROVEAN_score := str_split(PROVEAN_score, fixed(","))]
-mergedVariants[, SIFT_score := str_split(SIFT_score, fixed(","))]
-mergedVariants[, FATHMM_score := str_split(FATHMM_score, fixed(","))]
-mergedVariants[, Polyphen2_HVAR_score := str_split(Polyphen2_HVAR_score, fixed(","))]
-mergedVariants[, MPC_score := str_split(MPC_score, fixed(","))]
-mergedVariants[, MVP_score := str_split(MVP_score, fixed(","))]
-mergedVariants[, MutationTaster_score := str_split(MutationTaster_score, fixed(","))]
-mergedVariants = suppressWarnings(lapply(1:nrow(mergedVariants), function(index) {
-  row = mergedVariants[index,]
-  transcripts = unlist(row$Ensembl_transcriptid)
-  transIndex = which(CAN_TRANSCRIPT_ID == transcripts)
-  # If nothing found, use the first transcript
-  if (length(transIndex) < 1) {
-    warning("mismatch transcript. Use the first transcript.")
-    transIndex = 1
-  }
-  row$Uniprot_acc = unlist(row$Uniprot_acc)[transIndex]
-  row$PROVEAN_score = as.numeric(unlist(row$PROVEAN_score)[transIndex])
-  row$SIFT_score = as.numeric(unlist(row$SIFT_score)[transIndex])
-  row$FATHMM_score = as.numeric(unlist(row$FATHMM_score)[transIndex])
-  row$Polyphen2_HVAR_score = as.numeric(unlist(row$Polyphen2_HVAR_score)[transIndex])
-  row$MPC_score = as.numeric(unlist(row$MPC_score)[transIndex])
-  row$MVP_score = as.numeric(unlist(row$MVP_score)[transIndex])
-  row$MutationTaster_score = as.numeric(unlist(row$MutationTaster_score)[transIndex])
-  return(row)
-}))
-mergedVariants = rbindlist(mergedVariants)
+# 2) Missense variants
+mergedVariants = mergedVariants[str_detect(Consequence, "missense_variant")]
+
+# 3) Clean up variants
+mergedVariants = mergedVariants[str_detect(Protein_position, "-", negate=TRUE)]
+mergedVariants = mergedVariants[str_detect(CDS_position, "-", negate=TRUE)]
+
+# 4) Select columns
+mergedVariants =  mergedVariants[, c('variant_name', 'eid', 'chr', 'pos', 'ref', 'alt', 'Gene',
+                                     'Consequence', 'cDNA_position', 'CDS_position', 'Protein_position',
+                                     'Amino_acids', 'Codons', 'gnomAD_AF', 'AF')]
+
+# LOAD VARIANT EFFECT PREDICTIONS
+# Column list
+score_cols = c('UniProtID',	'aapos', 'aaref',	'aaalt',	'Ensembl_geneid',	'Ensembl_transcriptid',
+               'variant_name',	'REVEL_score',	'VARITY_R_score',	'Polyphen2_HVAR_score',
+               'PROVEAN_score',	'SIFT_score',	'FATHMM_score',	'MPC_score',	'LRT_score',	
+               'PrimateAI_score',	'CADD_raw',	'DANN_score', 'Eigen-raw_coding',	'GenoCanyon_score',
+               'M-CAP_score',	'MetaLR_score',	'MetaSVM_score',	'MVP_score',	'MutationTaster_score',
+               'SiPhy_29way_logOdds',	'alphaMissense_score',	'EVE_score',	'MutPred2_score',
+               'ESM1b_score',	'ESM1v_score')
+
+# VEPs pre-processed dbNSFPv4 file with add-ons
+scores = fread('common/VEP_scores_vFinal.csv', select=score_cols)
+
+# Merge predictor scores for gene with UKB variants
+mergedVariants = merge(mergedVariants, scores[Ensembl_geneid == ENSEMBL_ID],
+                       by.x = 'variant_name', by.y = 'variant_name')
 
 # Flip some predictor scores
-# provean, sift, fathmm, LRT
+# PROVEAN, SIFT, FATHMM, LRT, ESM1b and ESM1v
 mergedVariants[, PROVEAN_flipped := -PROVEAN_score]
 mergedVariants[, SIFT_flipped := -SIFT_score]
 mergedVariants[, FATHMM_flipped := -FATHMM_score]
 mergedVariants[, LRT_flipped := -LRT_score]
+mergedVariants[, ESM1b_flipped := -ESM1b_score]
+mergedVariants[, ESM1v_flipped := -ESM1v_score]
 
-# Merge VARITY
-mergedVariants$VARITY_ER = NULL
-mergedVariants$VARITY_R = NULL
-mergedVariants$Uniprot_acc = str_split(mergedVariants$Uniprot_acc, fixed("-"), simplify = T)[,1]
-mergedVariants$Protein_position = as.numeric(mergedVariants$Protein_position)
-varity = fread("common/varity_all_predictions.txt")
-mergedVariants = merge(mergedVariants,
-                       varity[, .(p_vid, nt_alt, aa_pos, aa_ref, aa_alt, VARITY_R, VARITY_ER, VARITY_R_LOO, VARITY_ER_LOO)],
-                       by.x = c("Uniprot_acc", "alt", "Protein_position", "aaref", "aaalt"),
-                       by.y = c("p_vid", "nt_alt", "aa_pos", "aa_ref", "aa_alt"),
-                       all.x = T)
+# Add CADD2 scores
+# These were only calculated for the UKB set and are not in the pre-processed file
+CADD2 = fread("common/CADD2/FritzDaniel_LR-Ce-01-wmo-i013.tsv",
+              select=c('oAA', 'nAA', 'protPos', 'GeneID', 'RawScore'))
 
-# Merge EVE
-eve = fread("common/eve_variants.csv")
-mergedVariants = merge(mergedVariants,
-                       eve[, .(uniprot_id, wt_aa, position, mt_aa, EVE_score = EVE_scores_ASM)], 
-                       by.x = c("Uniprot_acc", "Protein_position", "aaref", "aaalt"),
-                       by.y = c("uniprot_id", "position", "wt_aa", "mt_aa"),
-                       all.x = T)
+# Merge
+geneID = unique(mergedVariants$Ensembl_geneid)
+mergedVariants = merge(mergedVariants, CADD2[GeneID = geneID],
+                       by.x = c("Ensembl_geneid", "aapos", "aaref", "aaalt"),
+                       by.y = c("GeneID", "protPos", "oAA", "nAA"), all.x=T)
 
 # Select unique entry ID (eid)
 eids = sort(unique(mergedVariants$eid))
@@ -126,6 +115,6 @@ withdraws = as.numeric(withdraws)
 eids = eids[!eids %in% withdraws]
 
 # Save unique entry ID and the merged variants
-outputPrefix = sprintf("output/%s/%s_", toupper(GENE), GENE)
+outputPrefix = sprintf(paste0(OUTPUT_PATH, "/%s/%s"), toupper(GENE), GENE)
 writeLines(as.character(eids), paste0(outputPrefix, "unique_eids_filtered.txt"))
 fwrite(mergedVariants, paste0(outputPrefix, "variants_filtered.csv"))

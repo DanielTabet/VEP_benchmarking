@@ -11,11 +11,12 @@ if (length(args) != 3) {
 # Load configuration file
 source("lib/loadConfig.R")
 config = loadConfig(args[1])
+OUTPUT_PATH = = config$output_path
 
 # Add gene name and ensembl IDs to the config
 config$gene = tolower(args[2])
-config$ensembl_id = toupper(args[3])
-config$canonical_transcript_id = toupper(args[4])
+config$ensembl_id = toupper(args[4])
+#config$canonical_transcript_id = toupper(args[4])
 
 # Start logging
 if (is.na(args[5])) stop("Log file path not specified")
@@ -58,7 +59,7 @@ setUpEnvAndRun = function(prompt, file) {
 
 # Create output folder
 GENE = tolower(config$gene)
-outputPath = paste("output", toupper(GENE), sep = "/")
+outputPath = paste(OUTPUT_PATH, toupper(GENE), sep = "/")
 if (!dir.exists(outputPath)) dir.create(outputPath)
 
 # Parse variants

@@ -1,64 +1,64 @@
-gene_symbol,gene_id,phenotype_codes,phenotype_descriptions
+gene_symbol,gene_id,phenotype_codes,phenotype_descriptions
 GIGYF1,ENSG00000146830,"x30740
 x30770
 x30780","Glucose
 Insulin-like growth factor-1 (IGF-1)
-LDL direct"
+LDL direct"
 PDE3B,ENSG00000152270,"x22421
 x22423
 x30760
 x30870","Left ventricular end diastolic volume
 Stroke volume
 HDL cholesterol
-Triglycerides"
+Triglycerides"
 PIEZO1,ENSG00000103335,"x12144
 x41270_I839","Height (cm)
-I83.9, Asymptomatic varicose veins of lower extremities"
+I83.9, Asymptomatic varicose veins of lower extremities"
 SMAD6,ENSG00000137834,"x5098
 x41270_M50","6mm weak meridian (right)
-M50, Cervical disc disorders"
-ABCG5,ENSG00000138075,x30780,LDL direct
-ANGPTL4,ENSG00000167772,x30870,Triglycerides
-BRCA1,ENSG00000012048,x41270_Z400,"Z40.0, Encounter for prophylactic surgery for risk factors related to malignant neoplasms"
-CD36,ENSG00000135218,x30760,HDL cholesterol
-CEP57,ENSG00000166037,x30760,HDL cholesterol
-CETP,ENSG00000087237,x30760,HDL cholesterol
-COL4A4,ENSG00000081052,x41270_R31,"R31, Hematuria"
-KRT5,ENSG00000186081,x41270_L905,"L90.5, Scar conditions and fibrosis of skin"
-LIPC,ENSG00000166035,x30760,HDL cholesterol
-MLH1,ENSG00000076242,x41270_Z850,"Z85.0, Personal history of malignant neoplasm of digestive organs"
-NR1H3,ENSG00000025434,x30760,HDL cholesterol
-PALB2,ENSG00000083093,x41270_C50,"C50, Malignant neoplasm of breast"
-PLIN1,ENSG00000166819,x30760,HDL cholesterol
-RRBP1,ENSG00000125844,x30780,LDL direct
-SCARB1,ENSG00000073060,x30760,HDL cholesterol
-SLC45A2,ENSG00000164175,x1747_1,"Hair colour (natural, before greying): Blonde"
+M50, Cervical disc disorders"
+ABCG5,ENSG00000138075,x30780,LDL direct
+ANGPTL4,ENSG00000167772,x30870,Triglycerides
+BRCA1,ENSG00000012048,x41270_Z400,"Z40.0, Encounter for prophylactic surgery for risk factors related to malignant neoplasms"
+CD36,ENSG00000135218,x30760,HDL cholesterol
+CEP57,ENSG00000166037,x30760,HDL cholesterol
+CETP,ENSG00000087237,x30760,HDL cholesterol
+COL4A4,ENSG00000081052,x41270_R31,"R31, Hematuria"
+KRT5,ENSG00000186081,x41270_L905,"L90.5, Scar conditions and fibrosis of skin"
+LIPC,ENSG00000166035,x30760,HDL cholesterol
+MLH1,ENSG00000076242,x41270_Z850,"Z85.0, Personal history of malignant neoplasm of digestive organs"
+NR1H3,ENSG00000025434,x30760,HDL cholesterol
+PALB2,ENSG00000083093,x41270_C50,"C50, Malignant neoplasm of breast"
+PLIN1,ENSG00000166819,x30760,HDL cholesterol
+RRBP1,ENSG00000125844,x30780,LDL direct
+SCARB1,ENSG00000073060,x30760,HDL cholesterol
+SLC45A2,ENSG00000164175,x1747_1,"Hair colour (natural, before greying): Blonde"
 ABCA1,ENSG00000165029,"x30760
 x30630","HDL cholesterol
-Apolipoprotein A"
+Apolipoprotein A"
 LCAT,ENSG00000213398,"x30760
 x30630","HDL cholesterol
-Apolipoprotein A"
+Apolipoprotein A"
 HBB,ENSG00000244734,"x41270_D56
 x30010
 x30070","D56, Thalassaemia
 Red blood cell erythrocyte count
-Red blood cell erythrocyte distribution width"
+Red blood cell erythrocyte distribution width"
 JAK2,ENSG00000096968,"x41270_D45
 x30090
 x30770
 x30080","D45, Polycythaemia vera
 Platelet crit
 Insulin-like growth factor-1 (IGF-1)
-Platelet count"
+Platelet count"
 LPL,ENSG00000175445,"x30760
 x30870","HDL cholesterol
-Triglycerides"
+Triglycerides"
 PCSK9,ENSG00000169174,"x30780
 x30690
 x30640","LDL direct
 Cholesterol
-Apolipoprotein B"
+Apolipoprotein B"
 ANGPTL3,ENSG00000132855,"x30690
 x30870
 x30630
@@ -67,18 +67,18 @@ x30780","Cholesterol
 Triglycerides
 Apolipoprotein A
 HDL cholesterol
-LDL direct"
+LDL direct"
 ANGPTL8,ENSG00000130173,"x30760
 x30870","HDL cholesterol
-Triglycerides"
+Triglycerides"
 APOA5,ENSG00000110243,"x30870
 x30760","Triglycerides
-HDL cholesterol"
+HDL cholesterol"
 APOC3,ENSG00000110245,"x30760
 x30870","HDL cholesterol
-Triglycerides"
-MC1R,ENSG00000258839,x1747_2,"Hair colour (natural, before greying): Red"
-MEPE,ENSG00000152595,x3148,Heel bone mineral density
+Triglycerides"
+MC1R,ENSG00000258839,x1747_2,"Hair colour (natural, before greying): Red"
+MEPE,ENSG00000152595,x3148,Heel bone mineral density
 LDLR,ENSG00000130164,"x20002_1473
 x6153_1
 x20003_1141146234
@@ -87,98 +87,98 @@ x41270_I251","Non-cancer illness code, self-reported: high cholesterol
 Medication for cholesterol, blood pressure, diabetes,<br>or take exogenous hormones: Cholesterol lowering medication
 Treatment/medication code: atorvastatin
 LDL direct
-Atherosclerotic heart disease of native coronary artery"
-ABCB11,ENSG00000073734,x30610,Alkaline phosphatase
-ACAD11,ENSG00000240303,x21001,Body mass index (BMI)
-ADAMTS17,ENSG00000140470,x12144,Height (cm)
-ADAMTS6,ENSG00000049192,x12144,Height (cm)
-ALDH16A1,ENSG00000161618,x21001,Body mass index (BMI)
+Atherosclerotic heart disease of native coronary artery"
+ABCB11,ENSG00000073734,x30610,Alkaline phosphatase
+ACAD11,ENSG00000240303,x21001,Body mass index (BMI)
+ADAMTS17,ENSG00000140470,x12144,Height (cm)
+ADAMTS6,ENSG00000049192,x12144,Height (cm)
+ALDH16A1,ENSG00000161618,x21001,Body mass index (BMI)
 ALPL,ENSG00000162551,"x30610
 x30810","Alkaline phosphatase
-Phosphate"
-ANGPTL2,ENSG00000136859,x12144,Height (cm)
-APBA1,ENSG00000107282,x21001,Body mass index (BMI)
-ARID4B,ENSG00000054267,x21001,Body mass index (BMI)
-ASGR1,ENSG00000141505,x30610,Alkaline phosphatase
+Phosphate"
+ANGPTL2,ENSG00000136859,x12144,Height (cm)
+APBA1,ENSG00000107282,x21001,Body mass index (BMI)
+ARID4B,ENSG00000054267,x21001,Body mass index (BMI)
+ASGR1,ENSG00000141505,x30610,Alkaline phosphatase
 ASXL1,ENSG00000171456,"x21001
 x30070","Platelet distribution width
-Red blood cell erythrocyte distribution width"
-BRSK2,ENSG00000174672,x21001,Body mass index (BMI)
+Red blood cell erythrocyte distribution width"
+BRSK2,ENSG00000174672,x21001,Body mass index (BMI)
 BSN,ENSG00000164061,"x21001
 x21002","Body mass index (BMI)
-Weight (kg)"
-CDC42SE1,ENSG00000197622,x21001,Body mass index (BMI)
-CHEK2,ENSG00000183765,x30090,Platelet crit
-CLDN10,ENSG00000134873,x21001,Body mass index (BMI)
-CNIH2,ENSG00000174871,x21001,Body mass index (BMI)
+Weight (kg)"
+CDC42SE1,ENSG00000197622,x21001,Body mass index (BMI)
+CHEK2,ENSG00000183765,x30090,Platelet crit
+CLDN10,ENSG00000134873,x21001,Body mass index (BMI)
+CNIH2,ENSG00000174871,x21001,Body mass index (BMI)
 COL6A1,ENSG00000142156,"x5265
 x5264","Corneal resistance factor mean
-Corneal hysteresis mean"
-COL6A3,ENSG00000163359,x5265,Corneal resistance factor mean
-CRP,ENSG00000132693,x30710,C-reactive protein
-CST3,ENSG00000101439,x30720,Cystatin C
-DIS3L,ENSG00000166938,x21001,Body mass index (BMI)
-DTL,ENSG00000143476,x12144,Height (cm)
-FAM160A1,ENSG00000164142,x21001,Body mass index (BMI)
+Corneal hysteresis mean"
+COL6A3,ENSG00000163359,x5265,Corneal resistance factor mean
+CRP,ENSG00000132693,x30710,C-reactive protein
+CST3,ENSG00000101439,x30720,Cystatin C
+DIS3L,ENSG00000166938,x21001,Body mass index (BMI)
+DTL,ENSG00000143476,x12144,Height (cm)
+FAM160A1,ENSG00000164142,x21001,Body mass index (BMI)
 GCK,ENSG00000106633,"x30750
 x30740","Glycated haemoglobin
-Glucose"
-GHSR,ENSG00000121853,x30770,Insulin-like growth factor-1 (IGF-1)
-GMPR,ENSG00000137198,x30050,Mean corpuscular haemoglobin
-GOLGA8O,ENSG00000206127,x21001,Body mass index (BMI)
-GOT1,ENSG00000120053,x30650,Aspartate aminotransferase
-GP1BA,ENSG00000185245,x30100,Mean platelet (thrombocyte) volume
+Glucose"
+GHSR,ENSG00000121853,x30770,Insulin-like growth factor-1 (IGF-1)
+GMPR,ENSG00000137198,x30050,Mean corpuscular haemoglobin
+GOLGA8O,ENSG00000206127,x21001,Body mass index (BMI)
+GOT1,ENSG00000120053,x30650,Aspartate aminotransferase
+GP1BA,ENSG00000185245,x30100,Mean platelet (thrombocyte) volume
 GP1BB,ENSG00000203618,"x30100
 x30080","Mean platelet (thrombocyte) volume
-Platelet count"
+Platelet count"
 GP9,ENSG00000169704,"x30100
 x30080","Mean platelet (thrombocyte) volume
-Platelet count"
-GPLD1,ENSG00000112293,x30610,Alkaline phosphatase
-GPT,ENSG00000167701,x30620,Alanine aminotransferase
-IL17RA,ENSG00000177663,x30130,Monocyte count
+Platelet count"
+GPLD1,ENSG00000112293,x30610,Alkaline phosphatase
+GPT,ENSG00000167701,x30620,Alanine aminotransferase
+IL17RA,ENSG00000177663,x30130,Monocyte count
 IL33,ENSG00000137033,"x30210
 x30150","Eosinophil percentage
-Eosinophil count"
-IQGAP2,ENSG00000145703,x30100,Mean platelet (thrombocyte) volume
-IRS1,ENSG00000169047,x12144,Height (cm)
-ITGA2B,ENSG00000005961,x30080,Platelet count
+Eosinophil count"
+IQGAP2,ENSG00000145703,x30100,Mean platelet (thrombocyte) volume
+IRS1,ENSG00000169047,x12144,Height (cm)
+ITGA2B,ENSG00000005961,x30080,Platelet count
 KLF1,ENSG00000105610,"x30050
 x30040
 x30070","Mean corpuscular haemoglobin
 Mean corpuscular volume
-Red blood cell (erythrocyte) distribution width"
-LYPLAL1,ENSG00000143353,x21001,Body mass index (BMI)
-MLXIPL,ENSG00000009950,x30740,Glucose
-MPL,ENSG00000117400,x30080,Platelet count
-MSC,ENSG00000178860,x21001,Body mass index (BMI)
-NF1,ENSG00000196712,x12144,Height (cm)
-NPR2,ENSG00000159899,x12144,Height (cm)
-NT5C1A,ENSG00000116981,x21001,Body mass index (BMI)
-PAPPA,ENSG00000182752,x12144,Height (cm)
-PIGK,ENSG00000142892,x21001,Body mass index (BMI)
-PRRC1,ENSG00000164244,x21001,Body mass index (BMI)
-RAB35,ENSG00000111737,x21001,Body mass index (BMI)
-RHAG,ENSG00000112077,x30270,Mean sphered cell volume
-SCUBE3,ENSG00000146197,x12144,Height (cm)
-SHBG,ENSG00000129214,x30830,SHBG
-SLC22A12,ENSG00000197891,x30880,Urate
-SLC2A9,ENSG00000109667,x30880,Urate
+Red blood cell (erythrocyte) distribution width"
+LYPLAL1,ENSG00000143353,x21001,Body mass index (BMI)
+MLXIPL,ENSG00000009950,x30740,Glucose
+MPL,ENSG00000117400,x30080,Platelet count
+MSC,ENSG00000178860,x21001,Body mass index (BMI)
+NF1,ENSG00000196712,x12144,Height (cm)
+NPR2,ENSG00000159899,x12144,Height (cm)
+NT5C1A,ENSG00000116981,x21001,Body mass index (BMI)
+PAPPA,ENSG00000182752,x12144,Height (cm)
+PIGK,ENSG00000142892,x21001,Body mass index (BMI)
+PRRC1,ENSG00000164244,x21001,Body mass index (BMI)
+RAB35,ENSG00000111737,x21001,Body mass index (BMI)
+RHAG,ENSG00000112077,x30270,Mean sphered cell volume
+SCUBE3,ENSG00000146197,x12144,Height (cm)
+SHBG,ENSG00000129214,x30830,SHBG
+SLC22A12,ENSG00000197891,x30880,Urate
+SLC2A9,ENSG00000109667,x30880,Urate
 STAB1,ENSG00000010327,"x25031
 x25030
 x25028","Median T2star in putamen (right)
 Median T2star in putamen (left)
-Median T2star in caudate (left)"
-TET2,ENSG00000168769,x30150,Eosinophil count
-TEX22,ENSG00000226174,x21001,Body mass index (BMI)
-TMEM150B,ENSG00000180061,x21001,Body mass index (BMI)
-TMPRSS6,ENSG00000187045,x30050,Mean corpuscular haemoglobin
+Median T2star in caudate (left)"
+TET2,ENSG00000168769,x30150,Eosinophil count
+TEX22,ENSG00000226174,x21001,Body mass index (BMI)
+TMEM150B,ENSG00000180061,x21001,Body mass index (BMI)
+TMPRSS6,ENSG00000187045,x30050,Mean corpuscular haemoglobin
 TUBB1,ENSG00000101162,"x30080
 x30100
 x30110","Platelet count
 Mean platelet (thrombocyte) volume
-Platelet distribution width"
-TXNDC16,ENSG00000087301,x21001,Body mass index (BMI)
-VPS52,ENSG00000223501,x21001,Body mass index (BMI)
-ZFAT,ENSG00000066827,x12144,Height (cm)
-ZNF12,ENSG00000164631,x30770,Insulin-like growth factor-1 (IGF-1)
+Platelet distribution width"
+TXNDC16,ENSG00000087301,x21001,Body mass index (BMI)
+VPS52,ENSG00000223501,x21001,Body mass index (BMI)
+ZFAT,ENSG00000066827,x12144,Height (cm)
+ZNF12,ENSG00000164631,x30770,Insulin-like growth factor-1 (IGF-1)

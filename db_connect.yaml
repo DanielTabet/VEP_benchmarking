@@ -1,9 +1,0 @@
-##
-# Database info
-# Do NOT upload this file to Github because it contains sensitive login credentials
-##
-host: # Change to your local UK Biobank SQL server host
-port: # Change to your local UK Biobank SQL server port
-dbname: # Change to your local UK Biobank SQL server database name
-username: # Change to your local UK Biobank SQL server user name
-password: # Change to your local UK Biobank SQL server password
