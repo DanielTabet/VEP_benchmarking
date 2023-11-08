@@ -38,7 +38,6 @@ pVals = lapply(1:length(genes), function(index) {
   bPhenotypes = unnest(bPhenotypes, cols = c(field_code, field_description))
   bPhenotypes = as.data.table(bPhenotypes)
   bPhenotypes[, field_code := str_remove(field_code, "x")]
-  bPhenotypes[, field_code := str_remove(field_code, "\r")]
   bPhenotypes[, field_id := as.numeric(str_split(field_code, "_", simplify = T)[, 1])]
   
   # Attach phenotype category information
@@ -49,7 +48,7 @@ pVals = lapply(1:length(genes), function(index) {
   prcPvals = NULL
   
   # Check if correlations exist
-  filePath = sprintf(paste0(OUTPUT_PATH, "/%s/%s_correlations.csv"), toupper(gene), gene)
+  filePath = sprintf("output/%s/%s_correlations.csv", toupper(gene), gene)
   
   if (file.exists(filePath)) {
     # Load correlations
@@ -106,15 +105,15 @@ pVals = lapply(1:length(genes), function(index) {
   }
   
   # Check if AUPRC scores exist
-  catePhenotypes = bPhenotypes[field_type == "categorical", field_code]
-  filePath = sprintf(paste0(OUTPUT_PATH, "/%s/%s_%s_auprc.rds"), toupper(gene), gene, catePhenotypes)
+  catePhenotypes = bPhenotypes[field_type == "categorical", field_id]
+  filePath = sprintf("output/%s/%s_%s_auprc.rds", toupper(gene), gene, catePhenotypes)
   
   if (length(filePath) > 0 & all(file.exists(filePath))) {
     # Load AUPRCs
     results = lapply(filePath, readRDS)
     
     # Collect auprcs
-    phenotypes = bPhenotypes[field_type == "categorical", as.character(field_code)]
+    phenotypes = bPhenotypes[field_type == "categorical", as.character(field_id)]
     auprcs = lapply(1:length(results), function(index) {
       res = results[[index]]
       vals = res$auprcs
@@ -172,7 +171,7 @@ pVals = lapply(1:length(genes), function(index) {
                            breaks = c(0, 0.05), na.value = "white",
                            colors = c("#034c9d", "white")) +
       theme_minimal(base_size = 16) +
-      ggtitle(bPhenotypes[field_code == phenotype, field_description]) +
+      ggtitle(bPhenotypes[field_id == phenotype, field_description]) +
       labs(x = sprintf("Predictor Name (Mean %s)", type),
            y = sprintf("Predictor Name (Mean %s)", type)) +
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
@@ -184,7 +183,7 @@ pVals = lapply(1:length(genes), function(index) {
   
   # Arrange and save plots
   plots = arrangeGrob(grobs = plots, ncol = min(length(plots), 2))
-  outputFile = sprintf(paste0(OUTPUT_PATH, "/%s/%s_pval_heatmaps.png"), toupper(gene), gene)
+  outputFile = sprintf("output/%s/%s_pval_heatmaps.png", toupper(gene), gene)
   ggsave(outputFile, plots, height = ceiling(length(plots) / 2) * 9,
          width = 9 * min(2, length(plots)), units = "in")
   
@@ -206,7 +205,7 @@ pVals = lapply(1:length(genes), function(index) {
                            breaks = c(0, 0.1), na.value = "white",
                            colors = c("#034c9d", "white")) +
       theme_minimal(base_size = 16) +
-      ggtitle(bPhenotypes[field_code == phenotype, field_description]) +
+      ggtitle(bPhenotypes[field_id == phenotype, field_description]) +
       labs(x = sprintf("Predictor Name (Mean %s)", type),
            y = sprintf("Predictor Name (Mean %s)", type)) +
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
@@ -218,7 +217,7 @@ pVals = lapply(1:length(genes), function(index) {
   
   # Arrange and save plots
   plots = arrangeGrob(grobs = plots, ncol = min(length(plots), 2))
-  outputFile = sprintf(paste0(OUTPUT_PATH, "/%s/%s_qval_heatmaps.png"), toupper(gene), gene)
+  outputFile = sprintf("output/%s/%s_qval_heatmaps.png", toupper(gene), gene)
   ggsave(outputFile, plots, height = ceiling(length(plots) / 2) * 9,
          width = 9 * min(2, length(plots)), units = "in")
   
@@ -250,8 +249,8 @@ pVals$pred1_name = str_split(pVals$pred1, " ", simplify = T)[, 1]
 pVals$pred2_name = str_split(pVals$pred2, " ", simplify = T)[, 1]
 
 # Restrict to gene-trait combinations where every predictor was able to make prediction
-#subsetGeneCombs = pVals[, .N, by = c("gene", "code")][N == 441] # 21 * 21 = 441 pairwise predictor comparisons
-#pVals = merge(pVals, subsetGeneCombs[, .(gene, code)])
+subsetGeneCombs = pVals[, .N, by = c("gene", "code")][N == 441] # 21 * 21 = 441 pairwise predictor comparisons
+pVals = merge(pVals, subsetGeneCombs[, .(gene, code)])
 
 # Count the number of variant predictors that are indistinguishable from 
 # the best performing predictor
@@ -305,7 +304,7 @@ plot = plotTable %>%
   dplyr::mutate(pred1 = forcats::fct_reorder(pred1, num_indistinguishable.x),
                 pred2 = forcats::fct_reorder(pred2, num_indistinguishable.y)) %>%
   ggplot() +
-  geom_tile(aes(x = pred1, y = pred2, fill = q_val), linewidth = 0.5, color = "#d8d8d8") +
+  geom_tile(aes(x = pred1, y = pred2, fill = q_val), size = 0.5, color = "#d8d8d8") +
   scale_fill_gradientn(name = "FDR", limits = c(0, 0.1), labels = c("0", "\u2265 0.1"),
                        breaks = c(0, 0.1), na.value = "lightgrey",
                        colors = c("#034c9d", "white")) +

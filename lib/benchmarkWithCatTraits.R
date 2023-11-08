@@ -18,13 +18,14 @@ PLOT_INDIVIDUAL_CORRELATIONS = config$plot_individual_correlations
 BOOTSTRAP_N = config$bootstrap_iterations
 MIN_PATIENT_CUTOFF = config$occurance_cutoff
 VARIANTS_CUTOFF = config$occurance_cutoff
+OUTPUT_PATH = = config$output_path
 
 ###
 # Process categorical phenotypes
 # Stats: AUPRC
 ###
 # Load variants with quantitative and categorical phenotypes
-filePath = sprintf("output/%s/%s_variants_phenotypes.csv", toupper(GENE), GENE)
+filePath = sprintf(paste0(OUTPUT_PATH, "/%s/%s_variants_phenotypes.csv"), toupper(GENE), GENE)
 if (!file.exists(filePath)) stop("no cat variants")
 varPhenotypes = fread(filePath, header = T)
 
@@ -181,7 +182,7 @@ if (nrow(catePhenotypes) < 1) {
     results = list(variants = merged, auprcs = ret, auprcs_pval = auprcPvals)
     
     # Cache results
-    outputPath = sprintf("output/%s/%s_%s_auprc.rds", toupper(GENE), GENE, fieldId)
+    outputPath = sprintf(paste0(OUTPUT_PATH, "/%s/%s_%s_auprc.rds"), toupper(GENE), GENE, fieldId)
     saveRDS(results, outputPath)
     
     return(results)
@@ -229,7 +230,7 @@ if (nrow(catePhenotypes) < 1) {
           legend.text = element_text(size = 20)) +
     guides(fill = guide_legend(nrow = 4, byrow = TRUE))
   
-  ggsave(sprintf("output/%s/%s_cat_bootstrap_barplot.png", toupper(GENE), GENE), plot, dpi = 300,
+  ggsave(sprintf(paste0(OUTPUT_PATH, "/%s/%s_cat_bootstrap_barplot.png"), toupper(GENE), GENE), plot, dpi = 300,
          height = 4.5 + length(unique(plotTable$phenotype)),
          width = max(10, floor(length(VARIANT_PREDICTORS) * 1.1)), units = "in")
   
@@ -266,7 +267,7 @@ if (nrow(catePhenotypes) < 1) {
           legend.title.align = 1, legend.title = element_markdown(size = 16, vjust = 0.9),
           legend.key.width = unit(0.3, "in"))
   
-  ggsave(sprintf("output/%s/%s_cat_bootstrap.png", toupper(GENE), GENE), plot, dpi = 300,
+  ggsave(sprintf(paste0(OUTPUT_PATH, "/%s/%s_cat_bootstrap.png"), toupper(GENE), GENE), plot, dpi = 300,
          height = 4.5 + length(unique(plotTable$phenotype)),
          width = max(10, floor(length(VARIANT_PREDICTORS) * 1.1)), units = "in")
 }

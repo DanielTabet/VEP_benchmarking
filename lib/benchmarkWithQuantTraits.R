@@ -15,13 +15,14 @@ VARIANT_PREDICTORS = config$variant_predictors
 PLOT_INDIVIDUAL_CORRELATIONS = config$plot_individual_correlations
 BOOTSTRAP_N = config$bootstrap_iterations
 VARIANTS_CUTOFF = config$occurance_cutoff
+OUTPUT_PATH = = config$output_path
 
 ###
 # Process variants with quantitative phenotypes
 # Stats: PCC
 ###
 # Load variants with quantitative phenotypes
-filePath = sprintf("output/%s/%s_quant-variants_measures.csv", toupper(GENE), GENE)
+filePath = sprintf(paste0(OUTPUT_PATH, "/%s/%s_quant-variants_measures.csv"), toupper(GENE), GENE)
 if (!file.exists(filePath)) stop("no quant variants")
 quantVariants = fread(filePath, header = T)
 
@@ -76,7 +77,7 @@ calculateCorrAndPlot = function(code, type, variants, returnPlot = F) {
     plots = arrangeGrob(grobs = plots, ncol = 4)
     
     # Save plots
-    plotPath = sprintf("output/%s/%s_%s.png", toupper(GENE), GENE, path_sanitize(description))
+    plotPath = sprintf(paste0(OUTPUT_PATH, "/%s/%s_%s.png"), toupper(GENE), GENE, path_sanitize(description))
     ggsave(plotPath, plots, dpi = 300,
            units = "in", width = 20, height = 5 * ceiling(length(plots) / 4))
   }
@@ -193,7 +194,7 @@ benchmarkPhenotype = function(phenotype) {
   plots = arrangeGrob(grobs = lapply(plots, "[[", 1), ncol = 4,
                       top = textGrob(paste("Bootstrapping N =", BOOTSTRAP_N),
                                      gp = gpar(fontsize = 20)))
-  ggsave(sprintf("output/%s/%s_%s_bootstrap.png", toupper(GENE), GENE, path_sanitize(description)),
+  ggsave(sprintf(paste0(OUTPUT_PATH, "/%s/%s_%s_bootstrap.png"), toupper(GENE), GENE, path_sanitize(description)),
          plots, dpi = 300, units = "in",
          width = floor(length(results) / 4) * 7,
          height = floor(length(results) / 4) * 5)
@@ -248,12 +249,12 @@ if (nrow(bPhenotypes[field_type == "quantitative"]) < 1) {
           axis.title.x = element_markdown(),
           legend.title.align = 1, legend.title = element_markdown(size = 16, vjust = 0.9))
   
-  ggsave(sprintf("output/%s/%s_quant_bootstrap.png", toupper(GENE), GENE), plot, dpi = 300, 
+  ggsave(sprintf(paste0(OUTPUT_PATH, "/%s/%s_quant_bootstrap.png"), toupper(GENE), GENE), plot, dpi = 300, 
          height = 4.5 + length(unique(plotTable$phenotype)), 
          width = max(10, floor(length(VARIANT_PREDICTORS) * 1.1)), units = "in")
   
   # Format and save scores
   setnames(correlations, c("phenotype", "code"), c("field_description", "field_id"))
-  outputFile = sprintf("output/%s/%s_correlations.csv", toupper(GENE), GENE)
+  outputFile = sprintf(paste0(OUTPUT_PATH, "/%s/%s_correlations.csv"), toupper(GENE), GENE)
   fwrite(correlations, outputFile)
 }
