@@ -1,7 +1,7 @@
-CRAN_LIBRARIES = c("yaml", "data.table", "dplyr", "tidyr", "stringr", "tools",
+CRAN_LIBRARIES = c("yaml", "data.table", "dplyr", "tidyr", "stringr",
                    "ggtext", "glue", "forcats", "gridExtra", "fs", "Rmisc",
-                   "RMariaDB", "reshape2", "logr", "BiocManager", "remotes", "retry")
-BIOCONDUCTOR_LIBRARIES = c("EnsDb.Hsapiens.v86")
+                   "reshape2", "stringr", "logr", "BiocManager", "qvalue", "remotes", "retry")
+#BIOCONDUCTOR_LIBRARIES = c("EnsDb.Hsapiens.v86")
 GITHUB_LIBRARIES = c("jweile/yogiroc")
 
 # Install needed libraries

@@ -18,7 +18,7 @@ PLOT_INDIVIDUAL_CORRELATIONS = config$plot_individual_correlations
 BOOTSTRAP_N = config$bootstrap_iterations
 MIN_PATIENT_CUTOFF = config$occurance_cutoff
 VARIANTS_CUTOFF = config$occurance_cutoff
-OUTPUT_PATH = = config$output_path
+OUTPUT_PATH = config$output_path
 
 ###
 # Process categorical phenotypes
@@ -86,7 +86,7 @@ if (nrow(catePhenotypes) < 1) {
   cat("No Categorical phenotypes")
 } else {
   results = lapply(1:nrow(catePhenotypes), function(index) {
-    fieldId = catePhenotypes[index, field_id]
+    fieldId = catePhenotypes[index, field_code]
     
     # Extract variant name and phenotype assignment
     columns = c("variant_name", "eid", fieldId)
