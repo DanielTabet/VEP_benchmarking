@@ -2,7 +2,7 @@ library(data.table)
 
 # Set arguments if not passed in already as config
 GENE = tolower(config$gene)
-OUTPUT_PATH = = config$output_path
+OUTPUT_PATH = config$output_path
 
 # Load filtered phenotypes and variants
 phenotypes = fread(sprintf(paste0(OUTPUT_PATH, "/%s/%s_phenotypes_filtered.csv"), toupper(GENE), GENE))

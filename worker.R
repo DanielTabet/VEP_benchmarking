@@ -2,16 +2,16 @@ source("lib/packageCheck.R")
 
 # Check argument
 args = commandArgs(trailingOnly = T)
-if (length(args) != 3) {
+if (length(args) != 4) {
   cat("Usage:\n")
-  cat("  Rscript worker.R <configuration-file> <gene-name> <log-file>")
+  cat("  Rscript worker.R <configuration-file> <gene-name> <log-file> <ensemblId>")
   quit()
 }
 
 # Load configuration file
 source("lib/loadConfig.R")
 config = loadConfig(args[1])
-OUTPUT_PATH = = config$output_path
+OUTPUT_PATH = config$output_path
 
 # Add gene name and ensembl IDs to the config
 config$gene = tolower(args[2])
@@ -19,9 +19,9 @@ config$ensembl_id = toupper(args[4])
 #config$canonical_transcript_id = toupper(args[4])
 
 # Start logging
-if (is.na(args[5])) stop("Log file path not specified")
+if (is.na(args[3])) stop("Log file path not specified")
 library(logr)
-logFile = log_open(args[5], logdir = F)
+logFile = log_open(args[3], logdir = F)
 
 # Helper function: detach all packages
 detachAllPackages = function() {
@@ -66,9 +66,11 @@ if (!dir.exists(outputPath)) dir.create(outputPath)
 setUpEnvAndRun("Parsing variants", "lib/parseVariants.R")
 
 # Prepare burden-test associated phenotypes
+# Load phenotype selection
 library(data.table)
 library(stringr)
 geneList = fread(config$gene_list)
+
 bPhenotypes = geneList[gene_symbol == toupper(GENE),
                        .(field_code = str_split(phenotype_codes, "\n"),
                          field_description = str_split(phenotype_descriptions, "\n"))]
@@ -76,6 +78,7 @@ library(tidyr)
 bPhenotypes = unnest(bPhenotypes, cols = c(field_code, field_description))
 bPhenotypes = as.data.table(bPhenotypes)
 bPhenotypes[, field_code := str_remove(field_code, "x")]
+bPhenotypes[, field_code := str_remove(field_code, "\r")]
 bPhenotypes[, field_id := as.numeric(str_split(field_code, "_", simplify = T)[, 1])]
 
 # Attach phenotype category information

@@ -11,7 +11,7 @@ measurements = fread('common/VEP_benchmarking_phenotypes.csv')
 
 # Set arguments
 GENE = tolower(config$gene)
-OUTPUT_PATH = = config$output_path
+OUTPUT_PATH = config$output_path
 
 # Load participant eids
 eids = readLines(sprintf(paste0(OUTPUT_PATH, "/%s/%s_unique_eids_filtered.txt"), toupper(GENE), GENE))

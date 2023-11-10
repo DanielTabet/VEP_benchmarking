@@ -15,7 +15,7 @@ VARIANT_PREDICTORS = config$variant_predictors
 PLOT_INDIVIDUAL_CORRELATIONS = config$plot_individual_correlations
 BOOTSTRAP_N = config$bootstrap_iterations
 VARIANTS_CUTOFF = config$occurance_cutoff
-OUTPUT_PATH = = config$output_path
+OUTPUT_PATH = config$output_path
 
 ###
 # Process variants with quantitative phenotypes

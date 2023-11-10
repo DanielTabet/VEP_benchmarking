@@ -78,12 +78,15 @@ score_cols = c('UniProtID',	'aapos', 'aaref',	'aaalt',	'Ensembl_geneid',	'Ensemb
                'SiPhy_29way_logOdds',	'alphaMissense_score',	'EVE_score',	'MutPred2_score',
                'ESM1b_score',	'ESM1v_score')
 
+# Drop non-unique entries
+mergedVariants = unique(mergedVariants)
+
 # VEPs pre-processed dbNSFPv4 file with add-ons
 scores = fread('common/VEP_scores_vFinal.csv', select=score_cols)
 
 # Merge predictor scores for gene with UKB variants
-mergedVariants = merge(mergedVariants, scores[Ensembl_geneid == ENSEMBL_ID],
-                       by.x = 'variant_name', by.y = 'variant_name')
+scores = unique(scores[Ensembl_geneid == ENSEMBL_ID])
+mergedVariants = merge(mergedVariants, scores, by = 'variant_name', all.x=T)
 
 # Flip some predictor scores
 # PROVEAN, SIFT, FATHMM, LRT, ESM1b and ESM1v
@@ -97,13 +100,14 @@ mergedVariants[, ESM1v_flipped := -ESM1v_score]
 # Add CADD2 scores
 # These were only calculated for the UKB set and are not in the pre-processed file
 CADD2 = fread("common/CADD2/FritzDaniel_LR-Ce-01-wmo-i013.tsv",
-              select=c('oAA', 'nAA', 'protPos', 'GeneID', 'RawScore'))
+              select=c('Ref', 'Alt', 'Pos', 'GeneID', 'RawScore'))
 
 # Merge
-geneID = unique(mergedVariants$Ensembl_geneid)
-mergedVariants = merge(mergedVariants, CADD2[GeneID = geneID],
-                       by.x = c("Ensembl_geneid", "aapos", "aaref", "aaalt"),
-                       by.y = c("GeneID", "protPos", "oAA", "nAA"), all.x=T)
+#geneID = unique(na.omit(mergedVariants$Ensembl_geneid))
+CADD2 = unique(CADD2[GeneID == ENSEMBL_ID])
+mergedVariants = merge(mergedVariants, CADD2,
+                       by.x = c("pos", "ref", "alt"),
+                       by.y = c("Pos", "Ref", "Alt"), all.x=T)
 
 # Select unique entry ID (eid)
 eids = sort(unique(mergedVariants$eid))
@@ -115,6 +119,6 @@ withdraws = as.numeric(withdraws)
 eids = eids[!eids %in% withdraws]
 
 # Save unique entry ID and the merged variants
-outputPrefix = sprintf(paste0(OUTPUT_PATH, "/%s/%s"), toupper(GENE), GENE)
+outputPrefix = sprintf(paste0(OUTPUT_PATH, "/%s/%s_"), toupper(GENE), GENE)
 writeLines(as.character(eids), paste0(outputPrefix, "unique_eids_filtered.txt"))
 fwrite(mergedVariants, paste0(outputPrefix, "variants_filtered.csv"))
