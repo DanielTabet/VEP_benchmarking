@@ -6,9 +6,9 @@ gene_list: common/genes.csv
 phenotype_list: common/phenotypeDescriptions.csv
 rscript_path: Rscript
 input_var_dir: /home/rothlab/dtabet/ukb/ukb_data_450k_vFinal/
-occurance_cutoff: 10 # Variant occurance cut-off for categorical phenotypes
-bootstrap_iterations: 2500
-output_path : output_2k_a
+occurance_cutoff: 10 # Minimum number of variants with predictions (for each predictor)
+bootstrap_iterations: 10000
+output_path : output
 
 ###
 # Global settings
@@ -46,5 +46,5 @@ variant_predictors:
   MutPred2: MutPred2_score
   CADD2: RawScore
 #  ESM_CADD2: EsmScoreMissense_flipped
-  AlphaMissense: am_pathogenicity
+  AlphaMissense: alphaMissense_score
 plot_individual_correlations: false

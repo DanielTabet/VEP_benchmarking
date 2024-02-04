@@ -75,6 +75,7 @@ bPhenotypes = geneList[gene_symbol == toupper(GENE),
                        .(field_code = str_split(phenotype_codes, "\n"),
                          field_description = str_split(phenotype_descriptions, "\n"))]
 library(tidyr)
+# Prepare phenotype IDs for given gene
 bPhenotypes = unnest(bPhenotypes, cols = c(field_code, field_description))
 bPhenotypes = as.data.table(bPhenotypes)
 bPhenotypes[, field_code := str_remove(field_code, "x")]

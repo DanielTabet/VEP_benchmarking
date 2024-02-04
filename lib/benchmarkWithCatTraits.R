@@ -81,16 +81,19 @@ cl = makeCluster(no_cores - 1)
 registerDoParallel(cl)
 
 # Benchmark for each categorical phenotype
+# Select categorical phenotypes
 catePhenotypes = bPhenotypes[field_type == "categorical"]
 if (nrow(catePhenotypes) < 1) {
   cat("No Categorical phenotypes")
 } else {
+  # Iterate through categorical phenotypes by field_code
   results = lapply(1:nrow(catePhenotypes), function(index) {
     fieldId = catePhenotypes[index, field_code]
     
     # Extract variant name and phenotype assignment
     columns = c("variant_name", "eid", fieldId)
     catPhenotype = unique(varPhenotypes[, ..columns])
+    # Set phenotype column to common name (i.e., 'p')
     setnames(catPhenotype, as.character(fieldId), "p")
     
     # Helper function: check if a patient has a categorical phenotype
@@ -101,13 +104,14 @@ if (nrow(catePhenotypes) < 1) {
       return(!(p == ""))
     }
     
-    # Check if the phenotype has passed the cutoff
+    # Check if the number of participants with a given phenotyp has passed the minimum participant cutoff
     numPatient = sum(hasCatPhenotype(catPhenotype$p))
     if (numPatient <= MIN_PATIENT_CUTOFF)
       stop(sprintf("The number of patients with the phenotype (=%d) is less than or equal to the cutoff (=%d)",
                    numPatient, MIN_PATIENT_CUTOFF))
     
-    # Compute per-patient phenotype score
+    # Compute participat-level variant score
+    # Where a participant carries multiple variants in a given gene, scores are summed (additive model)
     merged = merge(catPhenotype, varPredictors, by = "variant_name")
     merged = merged[, lapply(.SD[, cols, with = F], sum), by = c("eid", "p")]
     
@@ -123,7 +127,7 @@ if (nrow(catePhenotypes) < 1) {
         
         return(!(p == ""))
       }
-      
+      # Sample participants with replacement
       sampled = sample(1:nrow(merged), nrow(merged), replace = T)
       sampled = merged[sampled]
       
@@ -167,7 +171,7 @@ if (nrow(catePhenotypes) < 1) {
       # Compute difference distribution
       diffDist = pred1Dist - pred2Dist
       
-      # Calculate the probability of P1 is not bigger than P2
+      # Calculate the probability of P1 not being larger than P2
       # (i.e. the difference is smaller than or equal to 0)
       pVal = sum(diffDist <= 0) / length(diffDist)
       
@@ -205,7 +209,7 @@ if (nrow(catePhenotypes) < 1) {
   plotTable = auprcs[, .(phenotype, predictor, type, index, avg_score = auprc,
                          auprc_ci)]
   
-  # Order predictors by its average performance
+  # Order predictors by their average performance
   predictorPerf = plotTable[, .(avg_score = mean(abs(avg_score))), by = "predictor"]
   predictorPerf[order(avg_score, decreasing = T), predictor_index := 1:nrow(predictorPerf)]
   plotTable = merge(plotTable, predictorPerf[, .(predictor, predictor_index)], by = "predictor")

@@ -73,7 +73,7 @@ pVals = lapply(1:length(genes), function(index) {
         pred1 = row[["pred1"]]
         pred2 = row[["pred2"]]
         
-        # Get AUPRC distributions
+        # Get PCC distributions
         pred1Dist = as.numeric(str_split(corrs[name == pred1 & field_id == phenotype, pcc], fixed("|"), simplify = T)[1,])
         pred2Dist = as.numeric(str_split(corrs[name == pred2 & field_id == phenotype, pcc], fixed("|"), simplify = T)[1,])
         
@@ -152,7 +152,15 @@ pVals = lapply(1:length(genes), function(index) {
   if (is.null(pVals)) return(NULL)
   
   # Compute q values
-  pVals$q_val = qvalue(pVals$p_val)$qvalues
+  phenotypes_ = unique(pVals$code)
+  for (i in phenotypes_) {
+    pVals[pVals$code == i, 'q_val'] = qvalue(pVals[pVals$code == i]$p_val)$qvalues
+  }
+  
+  # Compute q-values (--previous method--)
+  # q-values were being calculated based on the distribution
+  # of all p-values for a given gene (rather than each gene-trait combination)
+  #pVals$q_val = qvalue(pVals$p_val)$qvalues
   
   # Plot p-value heatmaps
   plots = lapply(unique(pVals$code), function(phenotype) {
@@ -289,7 +297,7 @@ sigs = apply(sigTest, 1, function(row) {
   # Filtered table
   subPVals = pVals[pred1_name == pred1Name & pred2_name == pred2Name]
   
-  sig = wilcox.test(subPVals$pred1_score, subPVals$pred2_score, alternative = "less", paired = T, exact = F)
+  sig = wilcox.test(subPVals$pred1_score, subPVals$pred2_score, alternative = "two.sided", paired = T, exact = F)
   return(sig$p.value)
 })
 sigTest$p_val = sigs
