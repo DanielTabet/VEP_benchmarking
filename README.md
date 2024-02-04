@@ -98,6 +98,9 @@ All output should be stored in the `output` folder.
 
 In addition, a `pval.csv` is created in the root folder containing all pairwise predictor comparisons. The `pval.csv` included in this repository was generated from the benchmark described in the manuscript.
 
+## Cohort data processing
+Scripts used to process UK Biobank and All of Us cohort data are included.
+
 ## Contact us
 
-If you have any feedback, suggestions or questions, please reach out via [email](mailto:kvn.kuang@mail.utoronto.ca) or open an issue on github.
+If you have any feedback, suggestions or questions, please reach out via [email](mailto:daniel.tabet@mail.utoronto.ca) or open an issue on github.
