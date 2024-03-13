@@ -58,4 +58,4 @@ Scripts used to process UK Biobank and All of Us cohort data are included in [da
 
 ## Contact us
 
-If you have any feedback, suggestions, or questions, please reach out via [email](mailto:daniel.tabet@mail.utoronto.ca) (daniel.tabet@mail.utoronto.ca).
+If you have any feedback, suggestions, or questions, please reach out via email (daniel.tabet@mail.utoronto.ca).
