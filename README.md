@@ -13,7 +13,7 @@ Next, clone the repository.
 git clone https://github.com/DanielTabet/VEP_benchmarking.git
 ```
 
-**Please note**, this repository does NOT contain raw data from either of the UK Biobank or *All of Us* cohorts, these are available upon application. To implement this pipeline as-is, cohort sequencing data is required in pVCF format (e.g, UKB field ID 23157). Alternatively, cohort data can be processed as in [sample_variants_filtered.csv](sample_variants_filtered.csv) and [sample_phenotypes_filtered.csv](sample_phenotypes_filtered.csv) for participant genotypes and phenotypes, respectively. We provide a sample set of scores from all 24 computational variant effect predictors assessed in this analysis in [common/VEP_scores_vFinal_sample.csv](common/VEP_scores_vFinal_sample.csv).
+**Please note**, this repository does not contain raw data from either of the UK Biobank or *All of Us* cohorts, these are available upon application. To implement this pipeline as-is, cohort sequencing data is required in pVCF format (e.g, UKB field ID 23157). Alternatively, cohort data can be processed as in [sample_variants_filtered.csv](sample_variants_filtered.csv) and [sample_phenotypes_filtered.csv](sample_phenotypes_filtered.csv) for participant genotypes and phenotypes, respectively. We provide a sample set of scores from all 24 computational variant effect predictors assessed in this analysis in [common/VEP_scores_vFinal_sample.csv](common/VEP_scores_vFinal_sample.csv).
 
 ## Confiugre the running parameters
 
