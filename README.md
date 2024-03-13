@@ -32,7 +32,7 @@ Here we document all parameters supported by the pipeline and their functions.
 | unique_variants_path | The filename pattern of the input unique variants and computational predictor scores. | ukb23148_c%s_b%s_v1_all_weights.csv |
 | variant_blocks_path | The filename of the pVCF file blocks. UK Biobank exome data is split across many pVCF files. This document itemises the content of these files. Read more about this here: https://biobank.ctsu.ox.ac.uk/crystal/refer.cgi?id=837 | [common/pvcf_blocks.txt](common/pvcf_blocks.txt) |
 | withdraw_eids_path | A file with all the participants who have withdrawn their participation from the UK Biobank study.<br>*See the sample file for format. Replace "<withdrawn_eidx>" in the sample file with actual EIDs. We are unable to provide real EIDs due to UK Biobank's data sharing restrictions.* | [common/withdraws.csv](common/withdraws.csv) |
-| variant_predictors | A list of variant effect predictors used in the study.<br>*Format: [predictor name]: [predictor column name in unique variants file (unique_variants_path)]* | *!incomplete list!*<br>VARITY: VARITY_R<br>PolyPhen-2: Polyphen2_selected_HVAR_score<br>... |
+| variant_predictors | A list of variant effect predictors used in the study.<br>*Format: [predictor name]: [predictor column name in unique variants file (unique_variants_path)]* | *!incomplete list!*<br>AlphaMissense: alphaMissense_score<br>VARITY: VARITY_R<br>... |
 | plot_individual_correlations | Whetherindividually plot correlations as scatterplots | FALSE |
 | plot_individual_correlations | Whetherindividually plot correlations as scatterplots | FALSE |
 
