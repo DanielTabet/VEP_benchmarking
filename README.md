@@ -1,25 +1,18 @@
-# Variante effect predictor assessment pipeline
+# Variant effect predictor benchmarking pipeline
 
 This GitHub repository contains the computational analysis pipeline used in the manuscript "Assessing computational variant effect predictors with a large prospective cohort" (in preparation).
 
-**Please note**, this repository does NOT contain raw data from the UK Biobank as they are available upon application. Please visit the [UK Biobank website](https://www.ukbiobank.ac.uk/) to apply for data access.
-
 ## Install
 
-To install the pipeline, first make sure your R version is at least R 4.0. You can check by typing the following into your R console:
+Before installing the pipeline, make sure your R version is at least R 4.0.
 
-```{r}
-R.version()$major
+Next, clone the repository.
+
+```
+git clone https://github.com/DanielTabet/VEP_benchmarking.git
 ```
 
-Next, clone the repository by typing the following into your command line interface:
-```
-git clone https://github.com/kvnkuang/variant-effect-predictor-assessment
-```
-
-You need to download VARITY predictions (http://varity.varianteffect.org/downloads/varity_all_predictions.tar.gz), unzip the file (varity_all_predictions.txt) and move it to the `common` folder.
-
-You also need access to UK Biobank exome variants (in pVCF format): https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=23148
+**Please note**, this repository does NOT contain raw data from either of the UK Biobank or *All of Us* cohorts, these are available upon application. To implement this pipeline as-is, cohort sequencing data is required in pVCF format (e.g, https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=23157). Alternatively, cohort data can be processed as in ./sample_variants_filtered.csv and ./sample_phenotypes_filtered.csv for participant genotypes and phenotypes, respectively. We provide a sample set of scores from all 24 computational variant effect predictors assessed in this analysis (common/VEP_scores_vFinal_sample.csv).
 
 ## Confiugre the running parameters
 
@@ -44,45 +37,9 @@ Here we document all parameters supported by the pipeline and their functions.
 | plot_individual_correlations | Whetherindividually plot correlations as scatterplots | FALSE |
 | plot_individual_correlations | Whetherindividually plot correlations as scatterplots | FALSE |
 
-## Set up a local UK Biobank phenotype database
-
-Using the phenotypes requested from the UK Biobank, set up a local UK Biobank phenotype database that the pipeline can use to query relevant phenotype information.
-
-**Please note**, we are not permitted to provide any access to a database containing UK Biobank data. Instead, we provide this Data Definition Language (DDL) snippet that can be used to set up a database compatible with this analysis pipeline.
-
-This snippnet is tested for MariaDB version 5.5 and should work for any modern MySQL and MariaDB instances.
-
-```
-create table phenotypes
-(
-	eid varchar(10) null,
-	pid varchar(50) null,
-	measurement text null,
-	array_index smallint null
-);
-
-create index phenotype_pid_index
-	on phenotypes (pid);
-
-create index phenotypes_eid_index
-	on phenotypes (eid);
-
-create index phenotypes_eid_pid_index
-	on phenotypes (eid, pid);
-```
-
-Here we describe the four columns defined in the above DDL snippet.
-
-| Column Name | Description |
-| --- | --- |
-| eid | The unique ID assigned to each UK Biobank participant |
-| pid | The unique ID assigned to each phenotype (trait) in the UK Biobank.<br>This must match with the `field_id`s in phenotype files defined in the config file above. |
-| measurement | The actual measurement of the phenotype. |
-| array_index | When a phenotype has multiple measurements, this index records the position of each measurement. |
-
 ## Run the pipeline
 
-To run the pipeline, type the following line into your command line interface:
+Execute.
 
 ```
 Rscript main.R <configuration-file> <log-dir>
@@ -94,12 +51,11 @@ There are two required arguments:
 
 ## Output
 
-All output should be stored in the `output` folder.
-
-In addition, a `pval.csv` is created in the root folder containing all pairwise predictor comparisons. The `pval.csv` included in this repository was generated from the benchmark described in the manuscript.
+Outputs should be stored in the ./output folder. All pairwise predictor comparisons are included in pval.csv in the root directory.
 
 ## Cohort data processing
-Scripts used to process UK Biobank and All of Us cohort data are included.
+
+Scripts used to process UK Biobank and All of Us cohort data are included in ./data_processing.
 
 ## Contact us
 
