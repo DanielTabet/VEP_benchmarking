@@ -12,7 +12,7 @@ Next, clone the repository.
 git clone https://github.com/DanielTabet/VEP_benchmarking.git
 ```
 
-**Please note**, this repository does NOT contain raw data from either of the UK Biobank or *All of Us* cohorts, these are available upon application. To implement this pipeline as-is, cohort sequencing data is required in pVCF format (e.g, https://biobank.ndph.ox.ac.uk/ukb/field.cgi?id=23157). Alternatively, cohort data can be processed as in ./sample_variants_filtered.csv and ./sample_phenotypes_filtered.csv for participant genotypes and phenotypes, respectively. We provide a sample set of scores from all 24 computational variant effect predictors assessed in this analysis (common/VEP_scores_vFinal_sample.csv).
+**Please note**, this repository does NOT contain raw data from either of the UK Biobank or *All of Us* cohorts, these are available upon application. To implement this pipeline as-is, cohort sequencing data is required in pVCF format (e.g, UKB field ID 23157). Alternatively, cohort data can be processed as in [./sample_variants_filtered.csv(test)] and ./sample_phenotypes_filtered.csv for participant genotypes and phenotypes, respectively. We provide a sample set of scores from all 24 computational variant effect predictors assessed in this analysis (common/VEP_scores_vFinal_sample.csv).
 
 ## Confiugre the running parameters
 
@@ -22,7 +22,7 @@ Here we document all parameters supported by the pipeline and their functions.
 
 | Parameter | Description | Default Value |
 | --- | --- | --- |
-| gene_list| A file with all the genes used in the study.<br>*See the sample file referred to by the default value for format.* | [common/genes.csv](common/genes.csv) |
+| gene_list| A file listing all genes included in the study.<br>*See the sample file referred to by the default value for format.* | [common/genes.csv](common/genes.csv) |
 | phenotype_list | A file with all phenotypes (traits) used in the study. <br>*See the sample file referred to by the default value for format.* | [common/phenotypeDescriptions.csv](common/phenotypeDescriptions.csv) |
 | rscript_path | The path to the RScript executable. | Rscript |
 | input_var_dir | The path to the input variants. | input |
